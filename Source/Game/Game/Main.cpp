@@ -13,12 +13,18 @@
 #include "Renderer/Particle.h"
 #include "Renderer/ParticleSystem.h"
 
+#include "Framework/Resource/ResourceManager.h"
+
+#include "Renderer/Texture.h"
+
 #include "SpazerWave.h"
 
 #include <iostream>
 #include <vector>
 #include <thread>
 #include <memory>
+#include <array>
+#include <map>
 
 using namespace std;
 
@@ -49,15 +55,14 @@ public:
 	vec2 m_vel;
 };
 
-
-
 int main(int argc, char* argv[])
 {
+
+	INFO_LOG("hello world");
 	
 	kiko::MemoryTracker::Initialize();
-	
 	kiko::seedRandom((unsigned int)time(nullptr));
-	kiko::setFilePath("assets");
+	kiko::setFilePath("Assets");
 
 	kiko::g_renderer.Initialize();
 	kiko::g_renderer.CreateWindow("CSC196", 800, 600);
@@ -81,6 +86,7 @@ int main(int argc, char* argv[])
 	bool quit = false;
 	while (!quit)
 	{
+		// update engine
 		kiko::g_time.Tick();
 		kiko::g_audioSystem.Update();
 		kiko::g_inputSystem.Update();
@@ -92,6 +98,7 @@ int main(int argc, char* argv[])
 		}
 
 		//update game
+		
 
 		game->Update(kiko::g_time.getDeltaTime());
 
@@ -125,3 +132,38 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
+/*
+	int n[4] = { 1, 2, 3, 4 };
+	print("array: ", n);
+	cout << n << endl;
+	cout << *(n + 3) << endl;
+
+	std::array<int, 4> na = { 1, 2, 3, 4 };
+	print("array class: ", na);
+	cout << na.front() << endl;
+	cout << na.back() << endl;
+	cout << na.max_size() << endl;
+
+	std::vector<int> nv = { 1, 2, 3, 4 };
+	print("vector: ", nv);
+	nv.insert(nv.begin() + 2, 0);
+	nv.push_back(5);
+	nv.pop_back();
+	auto iter = nv.erase(nv.begin(), nv.end());
+	print("vector: ", nv);
+
+	std::list<int> nl = { 1, 2, 3, 4 };
+	print("list:", nl);
+	nl.push_front(0);
+	print("list:", nl);
+
+	std::map<std::string, int> ages;
+	ages["charles"] = 17;
+	ages["xane"] = 18;
+	ages["jacob"] = 19;
+	ages["jacob"] = 20;
+
+	cout << ages["charles"] << endl;
+	cout << ages["xane"] << endl;
+*/

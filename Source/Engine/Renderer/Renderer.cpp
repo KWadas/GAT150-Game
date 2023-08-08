@@ -1,5 +1,7 @@
 #include "Renderer.h"
 #include "SDL2-2.28.0/include/SDL_ttf.h"
+#include "SDL2-2.28.0/include/SDL_image.h"
+#include "Texture.h"
 
 namespace kiko
 {
@@ -8,6 +10,7 @@ namespace kiko
 	bool Renderer::Initialize()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 		TTF_Init();
 		
 		return true;
@@ -18,6 +21,7 @@ namespace kiko
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyWindow(m_window);
 		TTF_Quit();
+		IMG_Quit();
 	}
 
 	void Renderer::CreateWindow(const std::string& title, int width, int height)
@@ -62,5 +66,19 @@ namespace kiko
 	void Renderer::DrawPoint(float x, float y)
 	{
 		SDL_RenderDrawPointF(m_renderer, x, y);
+	}
+
+	void Renderer::DrawTexture(Texture* texture, float x, float y, float angle)
+	{
+		vec2 size = texture->GetSize();
+
+		SDL_Rect dest;
+		dest.x = (int) (x - (size.x * 0.5f));
+		dest.y = (int)(y - (size.y * 0.5f));
+		dest.w = (int) size.x;
+		dest.h = (int) size.y;
+
+		// https://wiki.libsdl.org/SDL2/SDL_RenderCopyEx
+		SDL_RenderCopyEx(m_renderer, texture->m_texture, nullptr, &dest, angle, nullptr, SDL_FLIP_NONE);
 	}
 }

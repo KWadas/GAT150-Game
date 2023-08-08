@@ -38,7 +38,7 @@ void Enemy::Update(float dt)
     if (m_fireTimer <= 0.0f)
     {
         kiko::Transform transform{ m_transform.position, m_transform.rotation, 1};
-        std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform, kiko::g_manager.Get("enemy_bullet.txt"));
+        std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform);
         weapon->m_tag = "Enemy";
         m_scene->Add(std::move(weapon));
         m_fireTimer = m_fireRate;

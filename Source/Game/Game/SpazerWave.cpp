@@ -7,7 +7,11 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/ParticleSystem.h"
 
+#include "Framework/Components/EnginePhysicsComponent.h"
+
+#include "Framework/Resource/ResourceManager.h"
 #include "Framework/Scene.h"
+#include "Framework/Components/SpriteComponent.h"
 
 #include "Audio/AudioSystem.h"
 #include "Input/InputSystem.h"
@@ -18,25 +22,23 @@
 bool SpazerWave::Initialize()
 {
 	// create font / text objects
-	m_font = std::make_shared<kiko::Font>("ALBAS___.TTF", 24);
-	m_scoreText = std::make_unique<kiko::Text>(m_font);
+	//m_font = kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24);
+	m_scoreText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_scoreText->Create(kiko::g_renderer, "SCORE 0000", kiko::Color{1, 0, 1, 1});
 
-	m_explainText = std::make_unique<kiko::Text>(m_font);
+	m_explainText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_explainText->Create(kiko::g_renderer, "WATCH OUT: DIFFICULTY INCREASES OVER TIME!", kiko::Color{1, 0, 0, 1});
 
-	m_timerText = std::make_unique<kiko::Text>(m_font);
+	m_timerText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_timerText->Create(kiko::g_renderer, "TIME: ", kiko::Color{1, 0, 1, 1});
 
-	m_font = std::make_shared<kiko::Font>("ALBAS___.TTF", 28);
-	m_livesText = std::make_unique<kiko::Text>(m_font);
+	m_livesText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_livesText->Create(kiko::g_renderer, "  {}  ", kiko::Color{0, 1, 0, 1});
 
-	m_font = std::make_shared<kiko::Font>("ALBAS___.TTF", 72);
-	m_titleText = std::make_unique<kiko::Text>(m_font);
+	m_titleText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_titleText->Create(kiko::g_renderer, "SPAZERWAVE", kiko::Color{1, 1, 0, 1});
 
-	m_gameOverText = std::make_unique<kiko::Text>(m_font);
+	m_gameOverText = std::make_unique<kiko::Text>(kiko::g_resources.Get<kiko::Font>("ALBAS___.TTF", 24));
 	m_gameOverText->Create(kiko::g_renderer, "GAME OVER", kiko::Color{1, 1, 1, 1});
 	// load audio
 	kiko::g_audioSystem.AddAudio("shoot", "shoot.wav");
@@ -75,13 +77,23 @@ void SpazerWave::Update(float dt)
 		m_state = eState::StartLevel;
 		break;
 	case SpazerWave::eState::StartLevel:
-	{
 		m_scene->RemoveAll();
-		std::unique_ptr<Player> player = std::make_unique<Player>(20.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 4 }, kiko::g_manager.Get("ship.txt"));
+	{
+		// create player
+		auto player = std::make_unique<Player>(20.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 4 });
 		player->m_tag = "Player";
 		player->m_game = this;
-		player->SetDamping(0.9f);
 		player->setLevelUpTime((int) m_gameTimer);
+
+		//create components
+		auto renderComponent = std::make_unique < kiko::SpriteComponent>();
+		renderComponent->m_texture = kiko::g_resources.Get<kiko::Texture>("player_ship.png", kiko::g_renderer);
+		player->AddComponent(std::move(renderComponent));
+
+		auto physicsComponent = std::make_unique<kiko::EnginePhysicsComponent>();
+		physicsComponent->m_damping = 0.9f;
+		player->AddComponent(std::move(physicsComponent));
+
 		m_scene->Add(std::move(player));
 
 		m_state = eState::Game;
@@ -101,15 +113,20 @@ void SpazerWave::Update(float dt)
 			m_spawnTimer = 0;
 			float n = kiko::randomf(0, 1.0f);
 			if (n <= m_difficulty) {
-				enemy = std::make_unique<Enemy>(kiko::randomf(175.0f, 250.0f), 1.0f, kiko::Pi / 3.0f, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 3}, kiko::g_manager.Get("enemy_ship2.txt"), 200);
+				enemy = std::make_unique<Enemy>(kiko::randomf(175.0f, 250.0f), 1.0f, kiko::Pi / 3.0f, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 3}, 200);
 			}
 			else {
-				enemy = std::make_unique<Enemy>(kiko::randomf(75.0f, 150.0f), 2.0f, kiko::Pi, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 5}, kiko::g_manager.Get("enemy_ship1.txt"), 100);
+				enemy = std::make_unique<Enemy>(kiko::randomf(75.0f, 150.0f), 2.0f, kiko::Pi, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 5}, 100);
 			}
 			
 			
 			enemy->m_tag = "Enemy";
 			enemy->m_game = this;
+
+			auto renderComponent = std::make_unique < kiko::SpriteComponent>();
+			renderComponent->m_texture = kiko::g_resources.Get<kiko::Texture>("player_ship.png", kiko::g_renderer);
+			enemy->AddComponent(std::move(renderComponent));
+
 			m_scene->Add(std::move(enemy));
 
 			m_difficulty += 0.01f;

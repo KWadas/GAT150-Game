@@ -1,4 +1,5 @@
 #include "Actor.h"
+#include "Components/RenderComponent.h"
 
 namespace kiko
 {
@@ -10,13 +11,28 @@ namespace kiko
 			m_destroyed = (m_lifespan <= 0.0f);
 		}
 
-		m_transform.position += m_velocity * dt;
-		m_velocity *= std::pow(1.0f - m_damping, dt);
+		for (auto& component : m_components) {
+			component->Update(dt);
+		}
 
 	}
 
 	void Actor::Draw(kiko::Renderer& renderer)
 	{
-		if (m_model) m_model->Draw(renderer, m_transform);
+		//if (m_model) m_model->Draw(renderer, m_transform);
+		for (auto& component : m_components)
+		{
+			if (dynamic_cast<RenderComponent*>(component.get()))
+			{
+				dynamic_cast<RenderComponent*>(component.get())->Draw(renderer);
+			}
+		}
+	}
+
+	void Actor::AddComponent(std::unique_ptr<Component> component)
+	{
+		component->m_owner = this;
+		m_components.push_back(std::move(component));
+		
 	}
 }

@@ -7,6 +7,10 @@
 #include "Framework/Emitter.h"
 #include "Renderer/ModelManager.h"
 #include "Audio/AudioSystem.h"
+#include "Framework/Components/SpriteComponent.h"
+#include "Framework/Resource/ResourceManager.h"
+#include "Renderer/Renderer.h"
+#include "Framework/Components/PhysicsComponent.h"
 
 void Player::Update(float dt)
 {
@@ -45,7 +49,10 @@ void Player::Update(float dt)
     }
 
     kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(m_transform.rotation);
-    AddForce(forward * m_speed * thrust);
+
+    auto physicsComponent = GetComponent<kiko::PhysicsComponent>();
+    physicsComponent->ApplyForce(forward * m_speed * thrust);
+
     
     //m_transform.position += forward * m_speed * thrust * kiko::g_time.getDeltaTime();
 
@@ -59,8 +66,13 @@ void Player::Update(float dt)
         // create weapon
         for (int i = 0; i < m_power; i++) {
             kiko::Transform transform1{ m_transform.position, m_transform.rotation + kiko::DegreesToRadians((5.0f * i) - (5 * (i + 1) * i))};
-            std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(800.0f, transform1, kiko::g_manager.Get("bullet.txt"));
+            std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(800.0f, transform1);
             weapon->m_tag = "Player";
+
+            std::unique_ptr<kiko::SpriteComponent> component = std::make_unique < kiko::SpriteComponent>();
+            component->m_texture = kiko::g_resources.Get<kiko::Texture>("rocket.png", kiko::g_renderer);
+            weapon->AddComponent(std::move(component));
+
             m_scene->Add(std::move(weapon));
         }
     }
@@ -70,9 +82,14 @@ void Player::Update(float dt)
     {
         m_laserTime += dt;
         kiko::Transform transform1{ m_transform.position, m_transform.rotation, 1};
-        std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform1, kiko::g_manager.Get("laser.txt"));
+        std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>(400.0f, transform1);
         weapon->m_transform.scale *= 2.0f;
         weapon->m_tag = "Player";
+
+        std::unique_ptr<kiko::SpriteComponent> component = std::make_unique < kiko::SpriteComponent>();
+        component->m_texture = kiko::g_resources.Get<kiko::Texture>("rocket.png", kiko::g_renderer);
+        weapon->AddComponent(std::move(component));
+
         m_scene->Add(std::move(weapon));
     }
     
