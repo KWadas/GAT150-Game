@@ -1,42 +1,52 @@
 #include "Weapon.h"
-#include "Framework/Scene.h"
-#include "Framework/Emitter.h"
+#include "Renderer/Renderer.h"
+#include "Framework/Framework.h"
 
-void Weapon::Update(float dt)
+namespace kiko
 {
-    Actor::Update(dt);
+    CLASS_DEFINITION(Weapon)
     
-    kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(m_transform.rotation);
-    m_transform.position += forward * m_speed * kiko::g_time.getDeltaTime();
-    m_transform.position.x = kiko::Wrap(m_transform.position.x, (float)kiko::g_renderer.GetWidth());
-    m_transform.position.y = kiko::Wrap(m_transform.position.y, (float)kiko::g_renderer.GetHeight());
-}
+    bool Weapon::Initialize()
+    {
+        Actor::Initialize();
+        
+        auto collisionComponent = GetComponent<kiko::CollisionComponent>();
+        if (collisionComponent)
+        {
+            auto renderComponent = GetComponent<kiko::RenderComponent>();
+            if (renderComponent)
+            {
+                float scale = transform.scale;
+                collisionComponent->m_radius = GetComponent<kiko::RenderComponent>()->GetRadius() * scale;
+            }
+        }
 
-void Weapon::OnCollision(Actor* other)
-{
-    if (other->m_tag != m_tag && !m_destroyed)
-    {   
-        m_lifespan = 0.0f;
-        m_destroyed = true;
-
-        kiko::EmitterData data;
-        data.burst = true;
-        data.burstCount = 50;
-        data.spawnRate = 0;
-        data.angle = 0;
-        data.angleRange = kiko::Pi;
-        data.lifetimeMin = 0.5f;
-        data.lifetimeMin = 1.5f;
-        data.speedMin = 50;
-        data.speedMax = 250;
-        data.damping = 0.75f;
-
-        data.color = kiko::Color{ 0.75, 0, 1, 1 };
-
-        kiko::Transform transform{ m_transform.position, 0, 1 };
-        auto emitter = std::make_unique<kiko::Emitter>(transform, data);
-        emitter->m_lifespan = 0.1f;
-        m_scene->Add(std::move(emitter));
+        return true;
     }
 
+    void Weapon::Update(float dt)
+    {
+        Actor::Update(dt);
+        
+        kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(transform.rotation);
+        transform.position += forward * speed * kiko::g_time.getDeltaTime();
+        transform.position.x = kiko::Wrap(transform.position.x, (float)kiko::g_renderer.GetWidth());
+        transform.position.y = kiko::Wrap(transform.position.y, (float)kiko::g_renderer.GetHeight());
+    }
+
+    void Weapon::OnCollision(Actor* other)
+    {
+        if (other->tag != tag)
+        {
+            destroyed = true;
+        }
+
+    }
+
+    void Weapon::Read(const json_t& value)
+    {
+        Actor::Read(value);
+        
+        READ_DATA(value, speed);
+    }
 }

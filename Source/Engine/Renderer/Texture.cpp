@@ -47,13 +47,12 @@ namespace kiko
 
 	vec2 Texture::GetSize()
 	{
-		// ASSERT texture is not null
-		ASSERT_LOG(this->m_texture != NULL, "Texture can NOT be null.");
 		SDL_Point point;
-		// https://wiki.libsdl.org/SDL2/SDL_QueryTexture
 		SDL_QueryTexture(this->m_texture, NULL, NULL, &point.x, &point.y);
+
 		return vec2{ point.x, point.y };
 	}
 
-	
 }
+
+// https://wiki.libsdl.org/SDL2/SDL_QueryTexture

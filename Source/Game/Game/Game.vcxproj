@@ -102,6 +102,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/WHOLEARCHIVE:Framework %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,6 +121,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/WHOLEARCHIVE:Framework %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -134,6 +136,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/WHOLEARCHIVE:Framework %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Bin\$(PlatformName)\$(Configuration)\$(ProjectName)\*.exe" "$(SolutionDir)Build" /Y</Command>
@@ -155,6 +158,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/WHOLEARCHIVE:Framework %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Bin\$(PlatformName)\$(Configuration)\$(ProjectName)\*.exe" "$(SolutionDir)Build" /Y</Command>
@@ -186,9 +190,15 @@
     <ProjectReference Include="..\..\Engine\Input\Input.vcxproj">
       <Project>{0c4f8763-7376-48fc-b5c5-ec51ef2cc827}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Engine\Physics\Physics.vcxproj">
+      <Project>{af37b9f8-c224-47b8-ba1c-60b64386974d}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Engine\Renderer\Renderer.vcxproj">
       <Project>{aabea92b-84f7-4190-8b04-97d2514e7588}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\Build\Assets\scene.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

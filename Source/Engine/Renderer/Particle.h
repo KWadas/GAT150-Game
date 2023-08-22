@@ -1,8 +1,5 @@
 #pragma once
-#include <vector>
-#include "Core/Vector2.h"
-#include "Core/Color.h"
-#include "Renderer/Renderer.h"
+#include "Core/Core.h"
 
 namespace kiko
 {
@@ -27,7 +24,7 @@ namespace kiko
 			m_isActive = true;
 		}
 		void Update(float dt);
-		void Draw(Renderer& renderer);
+		void Draw(class Renderer& renderer);
 		friend class ParticleSystem;
 	private:
 		ParticleData m_data;

@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 #include "Core/Core.h"
 #include "Renderer/Model.h"
 #include "Components/Component.h"
@@ -6,14 +7,19 @@
 
 namespace kiko
 {
-    class Actor
+    class Actor: public Object
     {
     public:
+        CLASS_DECLARATION(Actor)
+        
         Actor() = default; // This automatically exists without typing
-
         Actor(const Transform& transform) :
-            m_transform{ transform }
+            transform{ transform }
         {}
+        Actor(const Actor& other);
+
+        virtual bool Initialize() override;
+        virtual void OnDestroy() override;
 
         virtual void Update(float dt);
         virtual void Draw(Renderer& renderer);
@@ -30,21 +36,23 @@ namespace kiko
 
         class Game* m_game = nullptr;
 
-        Transform m_transform;
-        std::string m_tag;
-
-        float m_lifespan = -1.0f;
+    public:
+        Transform transform;
+        std::string tag;
+        float lifespan = -1.0f;
+        bool destroyed = false;
+        bool persistent = false;
+        bool prototype = false;
 
     protected:
-        std::vector<std::unique_ptr<Component>> m_components;
-        bool m_destroyed = false;
+        std::vector<std::unique_ptr<Component>> components;
     };
 
 
     template<typename T>
     inline T* Actor::GetComponent()
     {
-        for (auto& component : m_components)
+        for (auto& component : components)
         {
             T* result = dynamic_cast<T*>(component.get());
             if (result) return result;

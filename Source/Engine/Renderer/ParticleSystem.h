@@ -1,5 +1,6 @@
 #pragma once
 #include "Particle.h"
+#include <vector>
 
 namespace kiko
 {
@@ -12,7 +13,7 @@ namespace kiko
 			m_particles.resize(maxCount);
 		}
 		void Update(float dt);
-		void Draw(Renderer& renderer);
+		void Draw(class Renderer& renderer);
 		Particle* GetFreeParticle();
 
 	private:

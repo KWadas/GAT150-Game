@@ -1,23 +1,16 @@
 #include "Core/Core.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/Font.h"
-#include "Renderer/Text.h"
-#include "Renderer/ModelManager.h"
 #include "Input/InputSystem.h"
 #include "Audio/AudioSystem.h"
-#include "Framework/Scene.h"
-#include "Player.h"
-#include "Enemy.h"
-
-#include "Framework/Emitter.h"
-#include "Renderer/Particle.h"
-#include "Renderer/ParticleSystem.h"
+#include "Framework/Framework.h"
 
 #include "Framework/Resource/ResourceManager.h"
 
-#include "Renderer/Texture.h"
+#include "Physics/PhysicsSystem.h"
 
 #include "SpazerWave.h"
+#include "Player.h"
+#include "Enemy.h"
 
 #include <iostream>
 #include <vector>
@@ -55,10 +48,11 @@ public:
 	vec2 m_vel;
 };
 
-int main(int argc, char* argv[])
-{
 
-	INFO_LOG("hello world");
+
+int main(int argc, char* argv[])
+{	
+	INFO_LOG("Initialize Engine...");
 	
 	kiko::MemoryTracker::Initialize();
 	kiko::seedRandom((unsigned int)time(nullptr));
@@ -70,6 +64,7 @@ int main(int argc, char* argv[])
 	//kiko::InputSystem inputSystem;
 	kiko::g_inputSystem.Initialize();
 	kiko::g_audioSystem.Initialize();
+	kiko::PhysicsSystem::Instance().Initialize();
 
 	unique_ptr<SpazerWave> game = make_unique<SpazerWave>();
 	game->Initialize();
@@ -104,9 +99,10 @@ int main(int argc, char* argv[])
 
 		kiko::g_renderer.SetColor(0, 0, 0, 0);
 		kiko::g_renderer.BeginFrame();
+		game->Draw(kiko::g_renderer);
 
 		// draw
-		kiko::g_particleSystem.Draw(kiko::g_renderer);
+		
 
 		for (auto& star : stars)
 		{
@@ -119,7 +115,8 @@ int main(int argc, char* argv[])
 
 		}
 
-		game->Draw(kiko::g_renderer);
+		kiko::g_particleSystem.Draw(kiko::g_renderer);
+
 		kiko::g_renderer.EndFrame();
 
 		
