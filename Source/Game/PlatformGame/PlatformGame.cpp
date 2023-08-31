@@ -20,7 +20,6 @@ bool PlatformGame::Initialize()
 	// create scene
 	m_scene = std::make_unique<kiko::Scene>();
 	m_scene->Load("Scenes/platformscene.json");
-	m_scene->Load("Scenes/tilemap.json");
 	m_scene->Initialize();
 
 	kiko::g_audioSystem.PlayOneShot("music", true);
@@ -57,6 +56,10 @@ void PlatformGame::Update(float dt)
 
 	case PlatformGame::eState::StartLevel:
 	{
+		m_scene->RemoveAll();
+		m_scene->Load("Scenes/tilemap.json");
+		m_scene->Initialize();
+
 		auto player = INSTANTIATE(Player, "Player");
 		player->Initialize();
 		m_scene->Add(std::move(player));
@@ -64,11 +67,15 @@ void PlatformGame::Update(float dt)
 		auto companion = INSTANTIATE(Enemy, "Companion");
 		companion->Initialize();
 		m_scene->Add(std::move(companion));
-
-		auto genemy = INSTANTIATE(GroundEnemy, "Skeleton");
-		genemy->Initialize();
-		m_scene->Add(std::move(genemy));
 	}
+		for (int i = 0; i < 3; i++)
+		{
+			auto genemy = INSTANTIATE(GroundEnemy, "Skeleton");
+			genemy->transform = kiko::Transform{ { kiko::random(1200), 100 }, 0, 3 };
+			genemy->Initialize();
+			m_scene->Add(std::move(genemy));
+			
+		}
 
 		for (int i = 0; i < 5; i++)
 		{
@@ -94,12 +101,25 @@ void PlatformGame::Update(float dt)
 		break;
 
 	case PlatformGame::eState::PlayerDeadStart:
+		m_stateTimer = 3;
+		if (m_lives == 0) m_state = eState::GameOver;
+		else m_state = eState::PlayerDead;
 		break;
 
 	case PlatformGame::eState::PlayerDead:
+		m_stateTimer -= dt;
+		if (m_stateTimer <= 0) {
+			m_state = eState::StartLevel;
+		}
 		break;
 
 	case PlatformGame::eState::GameOver:
+		m_scene->GetActorByName("GameOver")->active = true;
+		m_scene->GetActorByName("GameOverShadow")->active = true;
+		m_stateTimer -= dt;
+		if (m_stateTimer <= 0) {
+			m_state = eState::Title;
+		}
 		break;
 
 	default:
@@ -119,17 +139,24 @@ void PlatformGame::Draw(kiko::Renderer& renderer)
 	{
 		m_scene->GetActorByName("Title")->active = true;
 		m_scene->GetActorByName("TitleShadow")->active = true;
+		m_scene->GetActorByName("GameOver")->active = false;
+		m_scene->GetActorByName("GameOverShadow")->active = false;
 		m_scene->GetActorByName("Score")->active = false;
 		m_scene->GetActorByName("Banner")->active = false;
 		//m_scene->GetActorByName("Enemy")->active = false;
 	}
 	if (m_state == eState::GameOver)
 	{
-		
+		m_scene->GetActorByName("GameOver")->active = true;
+		m_scene->GetActorByName("GameOverShadow")->active = true;
+		m_scene->GetActorByName("Score")->active = true;
+		m_scene->GetActorByName("Banner")->active = true;
 	}
 	if (m_state != eState::Title && m_state != eState::GameOver) {
 		m_scene->GetActorByName("Title")->active = false;
 		m_scene->GetActorByName("TitleShadow")->active = false;
+		m_scene->GetActorByName("GameOver")->active = false;
+		m_scene->GetActorByName("GameOverShadow")->active = false;
 		m_scene->GetActorByName("Score")->active = true;
 		m_scene->GetActorByName("Banner")->active = true;
 		m_scoreText->Draw(renderer, 1050, 64);

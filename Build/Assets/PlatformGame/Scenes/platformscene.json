@@ -316,6 +316,44 @@
 		},
 		{
 			"type": "Actor",
+			"name": "GameOverShadow",
+			"persistent": true,
+			"transform": {
+				"position": [ 447, 347 ],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 32,
+					"text": "GAME OVER",
+					"color": [ 0, 0, 0, 1 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "GameOver",
+			"persistent": true,
+			"transform": {
+				"position": [ 440, 340 ],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 32,
+					"text": "GAME OVER",
+					"color": [ 1, 1, 1, 1 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
 			"name": "Score",
 			"persistent": true,
 			"transform": {
