@@ -1,0 +1,336 @@
+{
+	"actors":[
+		{
+			"type": "Actor",
+			"name": "Background1",
+			"persistent": true,
+			"transform": {
+				"position": [640, 360],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/BG1.png"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Background2",
+			"persistent": true,
+			"transform": {
+				"position": [640, 360],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/BG2.png"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Background3",
+			"persistent": true,
+			"transform": {
+				"position": [640, 360],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/BG3.png"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Banner",
+			"persistent": true,
+			"transform": {
+				"position": [1040, 90],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/banner.png"
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Coin",
+			"tag": "Coin",
+			"persistent": true,
+			"prototype": true,
+			"transform": {
+				"position": [340, 300],
+				"scale": 5,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimComponent",
+					"defaultSequenceName": "idle",
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 12,
+							"numColumns": 5,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 5,
+							"textureName": "textures/gem.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent"
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Crate",
+			"tag": "Ground",
+			"persistent": true,
+			"prototype": true,
+			"transform": {
+				"position": [400, 300],
+				"scale": 1,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/crate.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent"
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type": "Player",
+			"name": "Player",
+			"tag": "Player",
+			"persistent": true,
+			"prototype": true,
+			"speed": 70,
+			"maxSpeed": 8,
+			"jump": 12,
+			"transform": {
+				"position": [440, 300],
+				"scale": 3,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimComponent",
+					"defaultSequenceName": "idle",
+					"source": [0, 0, 18, 28],
+					"origin": [0.5, 1],
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 12,
+							"numColumns": 10,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 10,
+							"textureName": "textures/_Idle.png"
+						},
+						{
+							"name": "run",
+							"fps": 12,
+							"numColumns": 10,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 10,
+							"textureName": "textures/_Run.png"
+						},
+						{
+							"name": "attack",
+							"fps": 12,
+							"numColumns": 4,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 4,
+							"textureName": "textures/_AttackNoMovement.png"
+						},
+						{
+							"name": "fall",
+							"fps": 12,
+							"numColumns": 3,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 3,
+							"textureName": "textures/_Fall.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 2
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "Companion",
+			"tag": "Player",
+			"persistent": true,
+			"prototype": true,
+			"speed": 5,
+			"jump": 1,
+			"transform": {
+				"position": [550 , 200],
+				"scale": 2.0,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimComponent",
+					"defaultSequenceName": "idle",
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 12,
+							"numColumns": 4,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 4,
+							"textureName": "textures/bat.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 0,
+					"damping": 0.9
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"isTrigger": true
+				}
+			]
+		},
+		{
+			"type": "GroundEnemy",
+			"name": "Skeleton",
+			"tag": "Enemy",
+			"persistent": true,
+			"prototype": true,
+			"speed": 15,
+			"jump": 1,
+			"transform": {
+				"position": [600 , 100],
+				"scale": 3.0,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteAnimComponent",
+					"defaultSequenceName": "idle",
+					"sequences": [
+						{
+							"name": "idle",
+							"fps": 12,
+							"numColumns": 11,
+							"numRows": 1,
+							"startFrame": 1,
+							"endFrame": 11,
+							"textureName": "textures/skeleton_idle.png"
+						}
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"constrainAngle": true,
+					"gravityScale": 2
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "TitleShadow",
+			"persistent": true,
+			"transform": {
+				"position": [ 447, 347 ],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 32,
+					"text": "DARKER SOULS",
+					"color": [ 0, 0, 0, 1 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Title",
+			"persistent": true,
+			"transform": {
+				"position": [ 440, 340 ],
+				"scale": 4,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 32,
+					"text": "DARKER SOULS",
+					"color": [ 1, 1, 1, 1 ]
+				}
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Score",
+			"persistent": true,
+			"transform": {
+				"position": [ 1870, 128 ],
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 32,
+					"text": "SCORE:",
+					"color": [ 0, 0, 0, 1 ]
+				}
+			]
+		}
+	]
+}

@@ -9,16 +9,13 @@ namespace kiko
     bool Weapon::Initialize()
     {
         Actor::Initialize();
+
+        m_physicsComponent = GetComponent<PhysicsComponent>();
         
         auto collisionComponent = GetComponent<kiko::CollisionComponent>();
         if (collisionComponent)
         {
-            auto renderComponent = GetComponent<kiko::RenderComponent>();
-            if (renderComponent)
-            {
-                float scale = transform.scale;
-                collisionComponent->m_radius = GetComponent<kiko::RenderComponent>()->GetRadius() * scale;
-            }
+            
         }
 
         return true;
@@ -29,16 +26,18 @@ namespace kiko
         Actor::Update(dt);
         
         kiko::vec2 forward = kiko::vec2{ 0, -1 }.Rotate(transform.rotation);
-        transform.position += forward * speed * kiko::g_time.getDeltaTime();
+        m_physicsComponent->SetVelocity(forward * speed);
+
         transform.position.x = kiko::Wrap(transform.position.x, (float)kiko::g_renderer.GetWidth());
         transform.position.y = kiko::Wrap(transform.position.y, (float)kiko::g_renderer.GetHeight());
     }
 
-    void Weapon::OnCollision(Actor* other)
+    void Weapon::OnCollisionEnter(Actor* other)
     {
         if (other->tag != tag)
         {
             destroyed = true;
+            lifespan = -1.0f;
         }
 
     }

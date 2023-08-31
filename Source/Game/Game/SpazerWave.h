@@ -1,8 +1,9 @@
 #pragma once
 #include "Framework/Game.h"
+#include "Framework/Event/EventManager.h"
 #include "Renderer/Text.h"
 
-class SpazerWave : public kiko::Game
+class SpazerWave : public kiko::Game, kiko::IEventListener
 {
 public:
 	
@@ -28,6 +29,8 @@ public:
 	virtual void Draw(kiko::Renderer& renderer) override;
 
 	void SetState(eState state) { m_state = state; }
+	void OnAddPoints(const kiko::Event& event);
+	void OnPlayerDead(const kiko::Event& event);
 
 private:
 	eState m_state = eState::Title;

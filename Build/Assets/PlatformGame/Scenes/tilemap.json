@@ -1,0 +1,248 @@
+{
+	"actors":[
+		{
+			"type":"Actor",
+			"name":"Stone",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						96,
+						48,
+						16,
+						16
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"isDynamic": false
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"StoneLeft",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						80,
+						48,
+						16,
+						16
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"isDynamic": false
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.1
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"StoneLeftSide",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						80,
+						64,
+						16,
+						16
+					]
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"StoneRight",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						112,
+						48,
+						16,
+						16
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"isDynamic": false
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"StoneRightSide",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						112,
+						64,
+						16,
+						16
+					]
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"StoneBottom",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						96,
+						64,
+						16,
+						16
+					]
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"Grass",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						16,
+						0,
+						16,
+						16
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"isDynamic": false
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.2
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"Dirt",
+			"tag":"Ground",
+			"prototype":true,
+			"transform":{
+				"scale": 3
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/Tileset.png",
+					"source": [
+						96,
+						0,
+						16,
+						16
+					]
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"isDynamic": false
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"restitution": 0.5
+				}
+			]
+		},
+		{
+			"type":"Actor",
+			"name":"World",
+			"transform":{
+				"position":[
+					24,
+					24
+				]
+			},
+			"components":[
+				{
+					"type":"TilemapComponent",
+					"numColumns": 27,
+					"numRows": 15,
+					"size": [48, 48],
+					"tileNames": ["", "Grass", "Stone", "Dirt", "StoneBottom", "StoneLeft", "StoneRight", "StoneLeftSide", "StoneRightSide"],
+					"tiles": [
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 2, 2,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 4, 4, 4, 4, 4,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 4, 4, 4, 4, 4,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 2, 2, 2, 6, 0, 0, 7, 4, 4, 4, 4, 4, 4,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 4, 4, 4, 4, 4, 4, 8, 0, 0, 7, 4, 4, 4, 4, 4, 4,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 4, 4, 4, 4, 4, 4, 8, 0, 0, 7, 4, 4, 4, 4, 4, 4,
+							1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+							3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+							]
+				}    
+			]
+		}
+	]
+}

@@ -12,23 +12,17 @@
 bool SpazerWave::Initialize()
 {
 	// create font / text objects
-	m_font = GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24);
-	m_scoreText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
+	m_font = GET_RESOURCE(kiko::Font, "Fonts/ALBAS___.TTF", 24);
+	m_scoreText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "Fonts/ALBAS___.TTF", 24));
 	m_scoreText->Create(kiko::g_renderer, "SCORE 0000", kiko::Color{1, 0, 1, 1});
 
-	m_explainText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
-	m_explainText->Create(kiko::g_renderer, "WATCH OUT: DIFFICULTY INCREASES OVER TIME!", kiko::Color{1, 0, 0, 1});
-
-	m_timerText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
+	m_timerText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "Fonts/ALBAS___.TTF", 24));
 	m_timerText->Create(kiko::g_renderer, "TIME: ", kiko::Color{1, 0, 1, 1});
 
-	m_livesText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
+	m_livesText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "Fonts/ALBAS___.TTF", 24));
 	m_livesText->Create(kiko::g_renderer, "  {}  ", kiko::Color{0, 1, 0, 1});
 
-	m_titleText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
-	m_titleText->Create(kiko::g_renderer, "SPAZERWAVE", kiko::Color{1, 1, 0, 1});
-
-	m_gameOverText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "ALBAS___.TTF", 24));
+	m_gameOverText = std::make_unique<kiko::Text>(GET_RESOURCE(kiko::Font, "Fonts/ALBAS___.TTF", 24));
 	m_gameOverText->Create(kiko::g_renderer, "GAME OVER", kiko::Color{1, 1, 1, 1});
 	// load audio
 	kiko::g_audioSystem.AddAudio("shoot", "shoot.wav");
@@ -40,10 +34,13 @@ bool SpazerWave::Initialize()
 
 	// create scene
 	m_scene = std::make_unique<kiko::Scene>();
-	m_scene->Load("scene.json");
+	m_scene->Load("scenes/spacescene.json");
 	m_scene->Initialize();
-
 	kiko::g_audioSystem.PlayOneShot("music", true);
+
+	// add events
+	EVENT_SUBSCRIBE("OnAddPoints", SpazerWave::OnAddPoints);
+	EVENT_SUBSCRIBE("OnPlayerDead", SpazerWave::OnPlayerDead);
 
 	return true;
 }
@@ -76,24 +73,9 @@ void SpazerWave::Update(float dt)
 		m_scene->RemoveAll();
 	{
 		// create player
-		auto player = std::make_unique<Player>(20.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 1.0f });
-		player->tag = "Player";
-		player->m_game = this;
-		player->setLevelUpTime((int) m_gameTimer);
-
-		//create components
-		auto renderComponent = CREATE_CLASS(SpriteComponent);
-		renderComponent->m_texture = GET_RESOURCE(kiko::Texture, "player_ship.png", kiko::g_renderer);
-		player->AddComponent(std::move(renderComponent));
-
-		auto physicsComponent = CREATE_CLASS(EnginePhysicsComponent);
-		physicsComponent->m_damping = 0.9f;
-		player->AddComponent(std::move(physicsComponent));
-
-		auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
-		collisionComponent->m_radius = 30.0f;
-		player->AddComponent(std::move(collisionComponent));
-
+		//auto player = std::make_unique<Player>(20.0f, kiko::Pi, kiko::Transform{ {400, 300}, 0, 1.0f });
+		auto player = INSTANTIATE(Player, "Player");
+		player->transform = kiko::Transform{ {400, 300}, 0, 1.0f };
 		player->Initialize();
 		m_scene->Add(std::move(player));
 
@@ -106,38 +88,15 @@ void SpazerWave::Update(float dt)
 		
 		m_gameTimer += dt;
 		m_spawnTimer += dt;
-
-		m_scene->GetActor<Player>()->LevelUp((int) m_gameTimer);
 		
-		std::unique_ptr<Enemy> enemy;
+		
 		if (m_spawnTimer >= m_spawnTime)
 		{
 			m_spawnTimer = 0;
-			float n = kiko::randomf(0, 1.0f);
-			if (n <= m_difficulty) {
-				enemy = std::make_unique<Enemy>(kiko::randomf(175.0f, 250.0f), 1.0f, kiko::Pi / 3.0f, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 1}, 200);
-			}
-			else {
-				enemy = std::make_unique<Enemy>(kiko::randomf(75.0f, 150.0f), 2.0f, kiko::Pi, kiko::Transform{ {kiko::random(800), kiko::random(600)}, kiko::randomf(kiko::TwoPi), 1.5}, 100);
-			}
-			
-			
-			enemy->tag = "Enemy";
-			enemy->m_game = this;
-
-			auto renderComponent = std::make_unique<kiko::SpriteComponent>();
-			renderComponent->m_texture = GET_RESOURCE(kiko::Texture, "player_ship.png", kiko::g_renderer);
-			enemy->AddComponent(std::move(renderComponent));
-
-			auto collisionComponent = std::make_unique<kiko::CircleCollisionComponent>();
-			collisionComponent->m_radius = 30.0f;
-			enemy->AddComponent(std::move(collisionComponent));
-
+			auto enemy = INSTANTIATE(Enemy, "Enemy");
+			enemy->transform = kiko::Transform{ { kiko::random(1200), kiko::random(100) }, kiko::randomf(kiko::TwoPi), 1 };
 			enemy->Initialize();
 			m_scene->Add(std::move(enemy));
-
-			m_difficulty += 0.01f;
-			m_spawnTime -= 0.01f;
 		}
 
 		if (kiko::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !kiko::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
@@ -195,14 +154,14 @@ void SpazerWave::Draw(kiko::Renderer& renderer)
 
 	if (m_state == eState::Title)
 	{
-		m_titleText->Draw(renderer, 180, 250);
-		m_explainText->Draw(renderer, 140, 550);
+		m_scene->GetActorByName("Title")->active = true;
 	}
 	if (m_state == eState::GameOver)
 	{
 		m_gameOverText->Draw(renderer, 250, 300);
 	}
 	if (m_state != eState::Title) {
+		m_scene->GetActorByName("Title")->active = false;
 		m_scoreText->Draw(renderer, 40, 40);
 		m_timerText->Draw(renderer, 360, 40);
 		for (int i = 0; i < kiko::Game::GetLives(); i++) {
@@ -212,20 +171,14 @@ void SpazerWave::Draw(kiko::Renderer& renderer)
 	}
 }
 
+void SpazerWave::OnAddPoints(const kiko::Event& event)
+{
+	m_score += std::get<int>(event.data);
 
-/*kiko::EmitterData data;
-		data.burst = true;
-		data.burstCount = 100;
-		data.spawnRate = 200;
-		data.angle = 25;
-		data.angleRange = kiko::Pi;
-		data.lifetimeMin = 0.5f;
-		data.lifetimeMin = 1.5f;
-		data.speedMin = 50;
-		data.speedMax = 250;
-		data.damping = 0.5f;
-		data.color = kiko::Color{ 1, 1, 0, 1 };
-		kiko::Transform transform{ { kiko::g_inputSystem.GetMousePosition() }, 0, 1 };
-		auto emitter = std::make_unique<kiko::Emitter>(transform, data);
-		emitter->m_lifespan = 1.0f;
-		m_scene->Add(std::move(emitter));*/
+}
+
+void SpazerWave::OnPlayerDead(const kiko::Event& event)
+{
+	m_lives--;
+	m_state = eState::PlayerDeadStart;
+}

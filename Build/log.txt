@@ -1,8 +1,29 @@
-INFO: Factory.h(70) Class registered: Weapon
+INFO: Factory.h(70) Class registered: Enemy
+INFO: Factory.h(70) Class registered: GroundEnemy
+INFO: Factory.h(70) Class registered: Player
+INFO: Factory.h(70) Class registered: TilemapComponent
+INFO: Factory.h(70) Class registered: TextRenderComponent
 INFO: Factory.h(70) Class registered: SpriteComponent
+INFO: Factory.h(70) Class registered: SpriteAnimComponent
 INFO: Factory.h(70) Class registered: ModelRenderComponent
 INFO: Factory.h(70) Class registered: EnginePhysicsComponent
 INFO: Factory.h(70) Class registered: CircleCollisionComponent
+INFO: Factory.h(70) Class registered: Box2DPhysicsComponent
+INFO: Factory.h(70) Class registered: Box2DCollisionComponent
 INFO: Factory.h(70) Class registered: Actor
-INFO: Main.cpp(53) Initialize Engine...
-INFO: Factory.h(78) Prototype Class Registered: Rocket
+INFO: Main.cpp(26) Initialize Engine...
+INFO: Factory.h(78) Prototype Class Registered: Coin
+INFO: Factory.h(78) Prototype Class Registered: Crate
+INFO: Factory.h(78) Prototype Class Registered: Player
+INFO: Factory.h(78) Prototype Class Registered: Companion
+INFO: Factory.h(78) Prototype Class Registered: Skeleton
+INFO: Factory.h(78) Prototype Class Registered: Stone
+INFO: Factory.h(78) Prototype Class Registered: StoneLeft
+INFO: Factory.h(78) Prototype Class Registered: StoneLeftSide
+INFO: Factory.h(78) Prototype Class Registered: StoneRight
+INFO: Factory.h(78) Prototype Class Registered: StoneRightSide
+INFO: Factory.h(78) Prototype Class Registered: StoneBottom
+INFO: Factory.h(78) Prototype Class Registered: Grass
+INFO: Factory.h(78) Prototype Class Registered: Dirt
+INFO: EventManager.cpp(17) Event subscribed: OnAddPoints
+INFO: EventManager.cpp(17) Event subscribed: OnPlayerDead

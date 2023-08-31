@@ -22,6 +22,7 @@ namespace kiko
 		}
 
 		// check collisions
+		/*
 		for (auto iter1 = actors.begin(); iter1 != actors.end(); iter1++)
 		{
 			for (auto iter2 = std::next(iter1, 1); iter2 != actors.end(); iter2++)
@@ -38,7 +39,8 @@ namespace kiko
 
 				}
 			}
-		}
+		
+		*/
 
 	}
 

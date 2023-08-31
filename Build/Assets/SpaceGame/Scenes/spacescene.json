@@ -1,0 +1,126 @@
+{
+	"actors":[
+		{
+			"type": "Actor",
+			"name": "Background",
+			"persistent": true,
+			"transform": {
+				"position": [400, 300],
+				"scale": 0.25,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/space_background.png"
+				}
+			]
+		},
+		{
+			"type": "Player",
+			"name": "Player",
+			"prototype": true,
+			"tag": "Player",
+			"transform": {
+				"position": [ 400, 300],
+				"scale": 1,
+				"rotation": 0
+			},
+			"m_speed": 8,
+			"m_turnRate": 0.25,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/player_ship.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0.98,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [32, 32]
+				}
+			]
+		},
+		{
+			"type": "Enemy",
+			"name": "Enemy",
+			"prototype": true,
+			"tag": "Enemy",
+			"m_speed": 4,
+			"m_turnRate": 0.25,
+			"m_points": 100,
+			"m_fireRate": 3,
+			"m_fireTimer": 3,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/player_ship.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0.98,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [32, 32]
+				}
+			]
+		},
+		{
+			"type": "Weapon",
+			"name": "Rocket",
+			"prototype": true,
+			"lifespan" : 2,
+			"transform": {
+				"position": [400, 300],
+				"scale": 1.0,
+				"rotation": 0
+			},
+			"speed": 10.0,
+			"components": [
+				{
+					"type": "SpriteComponent",
+					"textureName": "textures/rocket.png"
+				},
+				{
+					"type": "Box2DPhysicsComponent",
+					"damping": 0,
+					"angularDamping": 2,
+					"gravityScale": 0
+				},
+				{
+					"type": "Box2DCollisionComponent",
+					"size": [32, 32],
+					"isTrigger": true,
+					"constrainAngle": true
+				}
+				
+			]
+		},
+		{
+			"type": "Actor",
+			"name": "Title",
+			"persistent": true,
+			"transform": {
+				"position": [ 400, 300 ],
+				"scale": 2,
+				"rotation": 0
+			},
+			"components": [
+				{
+					"type": "TextRenderComponent",
+					"fontName": "Fonts/ALBAS___.TTF",
+					"fontSize": 24,
+					"text": "SPAZERWAVE"
+
+				}
+			]
+		}
+	]
+}
